@@ -6,20 +6,21 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="flex max-w-4xl w-full bg-white rounded-lg shadow overflow-hidden">
+      {/* OUTER CONTAINER — no white bg, no shadow */}
+      <div className="flex max-w-4xl w-full overflow-hidden background: #7152F30D">
         {/* Image Section */}
         <div className="hidden md:block md:w-1/2">
           <img
-            src="/src/AttandenceOverview_Image.png" 
+            src="/src/AttandenceOverview_Image.png"
             alt="Login Illustration"
             className="object-cover w-full h-full"
           />
         </div>
 
-        {/* Form Section */}
-        <div className="w-full md:w-1/2 p-8">
+        {/* FORM SECTION — transparent, same bg as page */}
+        <div className="w-full md:w-1/2 p-10 h-full flex flex-col justify-center">
           {/* Logo */}
-          <div className="flex items-center mb-6">
+          <div className="flex items-center mb-8">
             <div className="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-lg">
               M
             </div>
@@ -27,29 +28,35 @@ const Login = () => {
           </div>
 
           {/* Welcome Text */}
-          <h2 className="text-xl font-bold text-gray-800 mb-1 flex items-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center">
             Welcome <span className="ml-1">👋</span>
           </h2>
-          <p className="text-gray-400 mb-6">Please login here</p>
+          <p className="text-gray-400 mb-8">Please login here</p>
 
           {/* Email */}
           <div className="mb-4">
-            <label className="block text-sm text-purple-600 mb-1">Email Address</label>
+            <label className="block text-sm text-purple-600 mb-1">
+              Email Address
+            </label>
             <input
               type="email"
+              placeholder="Enter your email"
               defaultValue="robertallen@example.com"
-              className="w-full border border-purple-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300"
+              className="w-full border border-purple-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
           </div>
 
           {/* Password */}
-          <div className="mb-4">
-            <label className="block text-sm text-purple-600 mb-1">Password</label>
+          <div className="mb-6">
+            <label className="block text-sm text-purple-600 mb-1">
+              Password
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
                 defaultValue="password"
-                className="w-full border border-purple-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-300"
+                className="w-full border border-purple-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}
@@ -60,23 +67,27 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Remember Me and Forgot Password */}
-          <div className="flex items-center justify-between mb-6">
+          {/* Remember Me & Forgot */}
+          <div className="flex items-center justify-between mb-8">
             <label className="flex items-center space-x-2">
-              <input type="checkbox" defaultChecked className="text-purple-500" />
+              <input
+                type="checkbox"
+                defaultChecked
+                className="accent-purple-500"
+              />
               <span className="text-sm font-medium">Remember Me</span>
             </label>
-            <button className="text-sm text-purple-500 hover:underline">Forgot Password?</button>
+            <button className="text-sm text-purple-500 hover:underline">
+              Forgot Password?
+            </button>
           </div>
 
           {/* Login Button */}
           <button
-            className="w-full"
+            className="w-full rounded text-white py-2 hover:opacity-90 transition"
             style={{ backgroundColor: "#7152F3" }}
           >
-            <span className="block text-white py-2 rounded hover:opacity-90 transition">
-              Login
-            </span>
+            Login
           </button>
         </div>
       </div>
