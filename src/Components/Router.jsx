@@ -82,7 +82,7 @@ const Router = () => {
       <Route path="/forget-password/:id" element={<ForgetPassword />} />
       <Route path="/enterOtp/:id" element={<EnterOtp />} />
 
-      <Route path="/dashboard" element={<DashboardPage />}>
+      <Route path="/dashboard" element={<Dashboard />}>
         <Route path="dashboardpage" element={<DashboardPage />} />
         <Route path="allEmployees" element={<AllEmployees />} />
         <Route path="attendance" element={<Attendance />} />

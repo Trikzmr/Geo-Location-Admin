@@ -6,9 +6,9 @@ const Dashboard = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <main className="flex-1 p-4">
+      <div className="flex-1 p-4">
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 };

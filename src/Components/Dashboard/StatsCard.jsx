@@ -1,20 +1,21 @@
 import React from "react";
+import { Users } from "lucide-react";
 
-
-const StatsCard = ({ icon, title, value }) => {
-  const Icon = icon ;
-
+const StatsCard = ({ title, value }) => {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm flex flex-col justify-between h-full">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="bg-purple-100 p-2 rounded-lg">
-            <Icon className="h-5 w-5 text-purple-500" />
+    <div className="flex flex-col justify-between border rounded-lg p-4 bg-white shadow-sm">
+      <div className="flex items-start justify-between">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 rounded bg-purple-100 text-purple-500 flex items-center justify-center text-lg">
+            <Users size={16} />
           </div>
-          <h3 className="text-sm font-medium text-gray-700">{title}</h3>
+          <h3 className="font-medium text-gray-700">{title}</h3>
         </div>
+        
       </div>
-      <div className="mt-4 text-2xl font-bold">{value}</div>
+
+      <div className="text-2xl font-bold text-gray-800 mt-4">{value}</div>
+
     </div>
   );
 };
