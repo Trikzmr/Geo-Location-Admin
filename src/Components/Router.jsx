@@ -74,7 +74,8 @@ import Settings from "../Pages/Settings";
 import EmployeeApproval from "../Pages/EmployeeApproval";
 import EmployeeApprovalDetails from "../Pages/EmployeeApprovalDetails";
 import EmployeeDetails from "../Pages/EmployeeDetails";
-
+import LeaveApplication from "../Pages/LeaveApplication"
+import LeaveApplicationDetails from "../Pages/LeaveApplicationDetails"
 const Router = () => {
   return (
     <Routes>
@@ -92,8 +93,8 @@ const Router = () => {
         <Route path="employeeRequest" element={<EmployeeApproval />} />
         <Route path="employeeRequestDetails/:id" element={<EmployeeApprovalDetails />} />
         <Route path="employeeDetails/:id" element={<EmployeeDetails />} />
-        <Route path="leaveApplication" element={<EmployeeApproval />} />
-        <Route path="leaveApplicationDetails/:id" element={<EmployeeApprovalDetails />} />
+        <Route path="leaveApplication" element={<LeaveApplication/>} />
+        <Route path="leaveApplicationDetails/:id" element={<LeaveApplicationDetails/>} />
       </Route>
     </Routes>
   );
