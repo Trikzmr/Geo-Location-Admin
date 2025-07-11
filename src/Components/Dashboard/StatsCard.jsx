@@ -3,7 +3,7 @@ import { Users } from "lucide-react";
 
 const StatsCard = ({ title, value }) => {
   return (
-    <div className="flex flex-col justify-between border rounded-lg p-4 bg-white shadow-sm">
+    <div className="flex flex-col justify-between border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
       <div className="flex items-start justify-between">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded bg-purple-100 text-purple-500 flex items-center justify-center text-lg">
