@@ -88,7 +88,7 @@ const Attendance = () => {
     <div className="p-8">
 
 
-      <div className="flex justify-between items-center mb-6 w-[1140px]">
+      <div className="flex justify-between items-center mb-6 w-[100%] overflow-hidden">
         <div>
           <h1 className="text-2xl font-semibold">Attendance</h1>
           <p className="text-gray-500">All Employee Attendance</p>
