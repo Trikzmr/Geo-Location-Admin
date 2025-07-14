@@ -1,62 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { FiFilter } from 'react-icons/fi';
 
 const LeaveApplication = () => {
-  const leaveRequests = [
-    {
-      date: 'July 01, 2025',
-      duration: 'July 05 - July 08',
-      days: '3 Days',
-      manager: 'Mark Willans',
-      status: 'Pending',
-    },
-    {
-      date: 'Apr 05, 2025',
-      duration: 'Apr 06 - Apr 10',
-      days: '4 Days',
-      manager: 'Mark Willans',
-      status: 'Approved',
-    },
-    {
-      date: 'Mar 12, 2025',
-      duration: 'Mar 14 - Mar 16',
-      days: '2 Days',
-      manager: 'Mark Willans',
-      status: 'Approved',
-    },
-    {
-      date: 'Feb 01, 2025',
-      duration: 'Feb 02 - Feb 10',
-      days: '8 Days',
-      manager: 'Mark Willans',
-      status: 'Approved',
-    },
-    {
-      date: 'Jan 01, 2025',
-      duration: 'Jan 16 - Jan 19',
-      days: '3 Days',
-      manager: 'Mark Willans',
-      status: 'Rejected',
-    },
-    {
-      date: 'Feb 01, 2025',
-      duration: 'Feb 02 - Feb 10',
-      days: '8 Days',
-      manager: 'Mark Willans',
-      status: 'Approved',
-    },
-    {
-      date: 'Jan 01, 2025',
-      duration: 'Jan 16 - Jan 19',
-      days: '3 Days',
-      manager: 'Mark Willans',
-      status: 'Rejected',
-    },
-  ];
 
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [showFilter, setShowFilter] = useState(false);
+
+  const [leaveRequests, setLeaveRequests] = useState([]);
+
+  function onload() {
+    apicall();
+  }
+
+  useEffect(onload, []);
+
+  async function apicall() {
+    try{
+    let api = "http://localhost:3005/api/getAllLeaveRequest";
+
+    let container = {
+      method : "GET",
+      headers : {
+        "Content-Type": "application/json"
+      }
+    }
+
+    let response = await fetch(api, container);
+    let data = await response.json();
+    setLeaveRequests(data);
+    console.log(data);
+    }
+    catch (error) {
+      console.error("API call failed : " , error);
+    }
+  }
 
   const filteredRequests =
     selectedStatus === 'All'
@@ -118,6 +96,7 @@ const LeaveApplication = () => {
         <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-50 text-gray-600 font-medium">
             <tr>
+              <th className="px-5 py-3">UserName</th>
               <th className="px-5 py-3">Date</th>
               <th className="px-5 py-3">Duration</th>
               <th className="px-5 py-3">Days</th>
@@ -129,21 +108,27 @@ const LeaveApplication = () => {
             {filteredRequests.length > 0 ? (
               filteredRequests.map((req, index) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-5 py-3">{req.date}</td>
-                  <td className="px-5 py-3">{req.duration}</td>
-                  <td className="px-5 py-3">{req.days}</td>
-                  <td className="px-5 py-3">{req.manager}</td>
+                  <td className="px-5 py-3">{req.userName || req.userId}</td>
+                  <td className="px-5 py-3">{req.requestedDate}</td>
+                  <td className="px-5 py-3">{req.startingDate} to {req.endingDate}</td>
+                  <td className="px-5 py-3">
+                  {
+                    Math.ceil((new Date(req.endingDate) - new Date(req.startingDate)) / (1000 * 60 * 60 * 24)) + 1
+                  } days
+                  </td>
+
+                  <td className="px-5 py-3">{req.adminId}</td>
                   <td className="px-5 py-3">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        req.status === 'Approved'
+                        req.approvalStatus === 'Approved'
                           ? 'bg-green-100 text-green-600'
-                          : req.status === 'Pending'
+                          : req.approvalStatus === 'Pending'
                           ? 'bg-yellow-100 text-yellow-600'
                           : 'bg-red-100 text-red-500'
                       }`}
                     >
-                      {req.status}
+                      {req.approvalStatus}
                     </span>
                   </td>
                 </tr>
