@@ -30,6 +30,7 @@ const LeaveApplication = () => {
     let data = await response.json();
     setLeaveRequests(data);
     console.log(data);
+    
     }
     catch (error) {
       console.error("API call failed : " , error);
@@ -41,6 +42,11 @@ const LeaveApplication = () => {
       ? leaveRequests
       : leaveRequests.filter((req) => req.status === selectedStatus);
 
+  const formatDate = (dateStr) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateStr).toLocaleDateString(undefined, options);
+  };
+  
   return (
     <div className="p-6">
       {/* Header */}
@@ -108,9 +114,9 @@ const LeaveApplication = () => {
             {filteredRequests.length > 0 ? (
               filteredRequests.map((req, index) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-5 py-3">{req.userName || req.userId}</td>
-                  <td className="px-5 py-3">{req.requestedDate}</td>
-                  <td className="px-5 py-3">{req.startingDate} to {req.endingDate}</td>
+                  <td className="px-5 py-3">{req.userName}</td>
+                  <td className="px-5 py-3">{formatDate(req.requestedDate)}</td>
+                  <td className="px-5 py-3">{formatDate(req.startingDate)} to {formatDate(req.endingDate)}</td>
                   <td className="px-5 py-3">
                   {
                     Math.ceil((new Date(req.endingDate) - new Date(req.startingDate)) / (1000 * 60 * 60 * 24)) + 1
