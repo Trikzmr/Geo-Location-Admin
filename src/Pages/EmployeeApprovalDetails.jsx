@@ -22,7 +22,7 @@ const EmployeeApprovalDetails = () => {
       {/* Page Header */}
       <h1 className="text-2xl font-semibold mb-6">Employee Request Details</h1>
 
-      <div className="bg-white border rounded-lg p-6 shadow flex flex-col md:flex-row justify-between">
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow flex flex-col md:flex-row justify-between">
         {/* Employee Details */}
         <div className="space-y-4">
           <div>

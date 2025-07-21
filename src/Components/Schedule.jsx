@@ -18,7 +18,7 @@ const Schedule = () => {
       </div>
 
       {/* React Calendar */}
-      <div className="react-calendar border rounded-lg">
+      <div className="react-calendar border border-gray-200 rounded-lg">
         <Calendar
           onChange={setDate}
           value={date}

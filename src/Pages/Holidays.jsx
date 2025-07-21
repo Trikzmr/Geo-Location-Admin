@@ -1,34 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Holidays = () => {
-  const holidays = [
-    { date: "January 01, 2023", day: "Tuesday", name: "New Year" },
-    { date: "January 07, 2023", day: "Saturday", name: "International Programmers’ Day" },
-    { date: "February 04, 2023", day: "Saturday", name: "World Cancer Day" },
-    { date: "April 01, 2023", day: "Saturday", name: "April Fool Day" },
-    { date: "May 07, 2023", day: "Monday", name: "International Programmers’ Day" },
-    { date: "May 22, 2023", day: "Tuesday", name: "International Day for Biological Diversity" },
-    { date: "June 05, 2023", day: "Monday", name: "International Day for Biological Diversity" },
-    { date: "August 07, 2023", day: "Monday", name: "International Friendship Day" },
-    { date: "September 15, 2023", day: "Friday", name: "International Day of Democracy" },
-    { date: "November 14, 2023", day: "Tuesday", name: "World Diabetes Day" },
-    { date: "December 25, 2023", day: "Monday", name: "Merry Christmas" },
-  ];
+  const [holidays, setHolidays] = useState([]);
+
+  useEffect(() => {
+    apicall();
+  }, []);
+
+  async function apicall() {
+    try {
+      const api = "http://localhost:3005/api/getWeekend";
+
+      const currentYear = new Date().getFullYear();
+
+      const container = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ year: currentYear }),
+      };
+
+      const response = await fetch(api, container);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const weekendData = await response.json();
+
+      const holidays = weekendData.flatMap(monthData => {
+        return monthData.dayCalander.map(day => ({
+          date: new Date(day.date).toLocaleDateString(),
+          day: new Date(day.date).toLocaleDateString('en-US', { weekday: 'long' }),
+          title: day.title || "Unnamed Holiday"
+        }));
+      });
+
+      setHolidays(holidays);
+    } catch (error) {
+      console.error("API call failed:", error);
+    }
+  }
 
   return (
     <div
-      className="
-        w-[1040px]
-        h-[680px]
-        
-        gap-5
-        opacity-100
-        bg-white
-        shadow
-        rounded-lg
-        p-6
-        flex flex-col
-      "
+      className="w-[1040px] h-[680px] gap-5 opacity-100 bg-white shadow rounded-lg p-6 flex flex-col"
     >
       <div className="flex justify-between items-center mb-4">
         <div>
@@ -51,13 +68,7 @@ const Holidays = () => {
       <div className="overflow-y-auto flex-1">
         <table className="min-w-full text-left">
           <thead>
-            <tr
-              className="
-                h-[44px]
-                border-b
-                border-gray-300
-              "
-            >
+            <tr className="h-[44px] border-b border-gray-300">
               <th className="py-3 px-4 text-gray-500">Date</th>
               <th className="py-3 px-4 text-gray-500">Day</th>
               <th className="py-3 px-4 text-gray-500">Holiday Name</th>
@@ -68,7 +79,7 @@ const Holidays = () => {
               <tr key={index} className="border-b border-gray-200">
                 <td className="py-3 px-4">{holiday.date}</td>
                 <td className="py-3 px-4">{holiday.day}</td>
-                <td className="py-3 px-4">{holiday.name}</td>
+                <td className="py-3 px-4">{holiday.title}</td>
               </tr>
             ))}
           </tbody>
