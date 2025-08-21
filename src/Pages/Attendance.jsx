@@ -12,7 +12,7 @@ const Attendance = () => {
       const today = new Date();
       const dateString = today.toISOString().split("T")[0];
 
-      const response = await fetch("http://localhost:3005/api/attendanceByDay", {
+      const response = await fetch("https://geo-location-based-attendence-tracking.onrender.com/api/attendanceByDay", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

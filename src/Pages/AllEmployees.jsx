@@ -11,7 +11,7 @@ const AllEmployees = () => {
   }
 
   async function apicall() {
-    let api = "http://localhost:3005/api/getEmployes";
+    let api = "https://geo-location-based-attendence-tracking.onrender.com/api/getEmployes";
     let container = {
       method : "GET",
       headers : {

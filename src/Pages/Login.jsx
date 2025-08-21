@@ -25,7 +25,7 @@ const Login = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:3005/api/login", {
+      const res = await fetch("https://geo-location-based-attendence-tracking.onrender.comapi/login", {
         method: "POST",
         headers: {
           "credentials": "include",

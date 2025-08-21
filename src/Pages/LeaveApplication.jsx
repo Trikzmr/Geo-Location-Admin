@@ -17,7 +17,7 @@ const LeaveApplication = () => {
 
   async function apicall() {
     try{
-    let api = "http://localhost:3005/api/getAllLeaveRequest";
+    let api = "https://geo-location-based-attendence-tracking.onrender.com/api/getAllLeaveRequest";
 
     let container = {
       method : "GET",
