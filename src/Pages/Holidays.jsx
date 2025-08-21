@@ -9,7 +9,7 @@ const Holidays = () => {
 
   async function apicall() {
     try {
-      const api = "http://localhost:3005/api/getWeekend";
+      const api = "https://geo-location-based-attendence-tracking.onrender.com/api/getWeekend";
 
       const currentYear = new Date().getFullYear();
 
