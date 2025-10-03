@@ -7,9 +7,16 @@ import { BrowserRouter } from 'react-router-dom';
 const App = () => {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Router />
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+
+        {/* Add margin/padding top to avoid overlap */}
+        <main className="flex-grow mt-16">
+          <Router />
+        </main>
+
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 };

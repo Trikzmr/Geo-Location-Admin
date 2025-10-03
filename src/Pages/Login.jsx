@@ -25,7 +25,7 @@ const Login = () => {
     }
 
     try {
-      const res = await fetch("https://geo-location-based-attendence-tracking.onrender.comapi/login", {
+      const res = await fetch("https://geo-location-based-attendence-tracking.onrender.com/api/login", {
         method: "POST",
         headers: {
           "credentials": "include",
@@ -52,7 +52,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="flex max-w-4xl w-full overflow-hidden background: #7152F30D">
+      <div className="flex  w-full overflow-hidden background: #7152F30D">
         <div className="hidden md:block md:w-1/2">
           <img
             src="/src/AttandenceOverview_Image.png"

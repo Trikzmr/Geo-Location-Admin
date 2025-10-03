@@ -1,0 +1,77 @@
+/* calendar-custom.css */
+.react-calendar {
+  width: 100%;
+  border: none !important;
+  font-family: "Inter", sans-serif;
+  background: transparent;
+}
+
+/* Navigation */
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.react-calendar__navigation button {
+  color: #4f46e5; /* indigo-600 */
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  padding: 4px 8px;
+  transition: background 0.2s;
+}
+
+.react-calendar__navigation button:enabled:hover {
+  background: #f3f4f6; /* gray-100 */
+}
+
+/* Weekdays */
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  font-weight: 500;
+  color: #6b7280; /* gray-500 */
+  margin-bottom: 0.5rem;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 6px 0;
+}
+
+/* Days */
+.react-calendar__tile {
+  border-radius: 12px;
+  padding: 12px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151; /* gray-700 */
+  transition: all 0.2s ease-in-out;
+}
+
+.react-calendar__tile:enabled:hover {
+  background: #ede9fe; /* purple-100 */
+  color: #4f46e5; /* purple-600 */
+}
+
+/* Today */
+.react-calendar__tile--now {
+  background: #e0e7ff; /* indigo-100 */
+  color: #4338ca; /* indigo-700 */
+  font-weight: 600;
+}
+
+/* Selected day */
+.react-calendar__tile--active {
+  background: #4f46e5 !important; /* indigo-600 */
+  color: white !important;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+/* Highlight custom days */
+.highlight-day {
+  background: #f5f3ff !important; /* purple-50 */
+  color: #7c3aed !important; /* purple-600 */
+  border-radius: 12px;
+  font-weight: 600;
+}

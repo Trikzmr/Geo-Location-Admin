@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 const sidebarItems = [
-  { icon: <Home size={18} />, title: "Dashboard", to: "" },
+  { icon: <Home size={18} />, title: "Dashboard", to: "overview" },
   { icon: <CalendarCheck size={18} />, title: "Attendance", to: "attendance" },
   { icon: <Users size={18} />, title: "All Employees", to: "allEmployees" },
   { icon: <MailOpen size={18} />, title: "Employee Requests", to: "employeeRequest" },
@@ -26,7 +26,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <div className="w-64 h-screen bg-white border-r shadow-sm flex flex-col justify-between">
+    <div className="w-64 h-screen bg-white border-r border-gray-300 shadow-sm flex flex-col justify-between">
       {/* Logo */}
       <div className="px-6 py-4">
         <div className="flex items-center space-x-2">

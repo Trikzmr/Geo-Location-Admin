@@ -3,7 +3,7 @@ import React from 'react';
 const ForgetPassword = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="flex max-w-4xl w-full bg-white rounded-lg shadow overflow-hidden">
+      <div className="flex w-full bg-white rounded-lg shadow overflow-hidden">
         
         {/* Image Section */}
         <div className="hidden md:block md:w-1/2">

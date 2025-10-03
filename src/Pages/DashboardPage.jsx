@@ -1,35 +1,21 @@
-// import React from 'react';
-// import StatsSection from '../Components/Dashboard/StatsSection';
-// import Schedule from "../Components/Schedule";
-
-// const DashboardPage = () => {
-//   return (
-//     <div className="p-4">
-//       <h1 className="text-xl font-semibold mb-4">Dashboard</h1>
-//       <StatsSection />
-//       <Schedule />
-//     </div>
-//   );
-// };
-
-// export default DashboardPage;
-
 import React from "react";
 import StatsSection from "../Components/Dashboard/StatsSection";
-import Schedule from "../Components/Schedule";
+import Schedule from "../Components/Dashboard/Schedule";
+import AttendanceOverview from "../Components/Dashboard/AttendanceOverview";
 
 const DashboardPage = () => {
   return (
-    <div className="flex flex-wrap gap-4">
-
-      <div className="flex-1 min-w-[300px]">
+    <div className="p-6 flex gap-6">
+      {/* Stats Section (2x2 cards layout inside the component) */}
+      <div className="w-[70%]">
         <StatsSection />
+        <AttendanceOverview />
       </div>
 
-      <div className="w-full md:w-[320px]">
+      {/* Schedule on the right side */}
+      <div className="w-[30%]">
         <Schedule />
       </div>
-      
     </div>
   );
 };

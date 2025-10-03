@@ -35,13 +35,21 @@ const EmployeeDetails = () => {
     ],
   };
 
+  // Generate Google Maps embed URL with pin
+  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(
+    employee.personalInfo.address
+  )}&output=embed`;
+
   return (
     <div className="p-6">
       {/* Header */}
-
-      <div className="flex justify-between items-center border-b pb-4 mb-6 w-[1140px]">
+      <div className="flex justify-between items-center border-b border-gray-300 pb-4 mb-6 w-[1140px]">
         <div className="flex items-center space-x-4">
-          <img src={employee.avatar} alt={employee.name} className="w-20 h-20 rounded-full object-cover" />
+          <img
+            src={employee.avatar}
+            alt={employee.name}
+            className="w-20 h-20 rounded-full object-cover"
+          />
           <div>
             <h2 className="text-xl font-semibold">{employee.name}</h2>
             <p className="text-gray-500">{employee.role}</p>
@@ -54,11 +62,9 @@ const EmployeeDetails = () => {
       </div>
 
       <div className="flex">
-
         {/* Main Vertical Tabs */}
-
         <div className="w-48 mr-4">
-          {["Profile", "Attendance", "Leave"].map((tab) => (
+          {["Profile", "Attendance", "Leave", "Map"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveMainTab(tab)}
@@ -74,25 +80,26 @@ const EmployeeDetails = () => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 border rounded p-6 w-[900px]">
-          
+        <div className="flex-1 border border-gray-300 rounded-[10px] p-6 w-[900px]">
           {/* Profile with Nested Tabs */}
           {activeMainTab === "Profile" && (
             <>
-              <div className="flex space-x-4 mb-4 border-b">
-                {["Personal Information", "Professional Information"].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveProfileTab(tab)}
-                    className={`py-2 px-4 -mb-px border-b-2 font-medium ${
-                      activeProfileTab === tab
-                        ? "border-[#7152F3] text-[#7152F3]"
-                        : "border-transparent text-gray-500 hover:text-[#7152F3]"
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
+              <div className="flex space-x-4 mb-4 border-b border-gray-300">
+                {["Personal Information", "Professional Information"].map(
+                  (tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveProfileTab(tab)}
+                      className={`py-2 px-4 -mb-px border-b border-[#7152F3] font-medium ${
+                        activeProfileTab === tab
+                          ? "border-[#7152F3] text-[#7152F3]"
+                          : "border-transparent text-gray-500 hover:text-[#7152F3]"
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  )
+                )}
               </div>
 
               {/* Inner Tab Content */}
@@ -100,54 +107,57 @@ const EmployeeDetails = () => {
                 <div className="grid grid-cols-2 gap-6">
                   {Object.entries(employee.personalInfo).map(([key, value]) => (
                     <div key={key}>
-                      <p className="text-xs text-gray-500">{key.replace(/([A-Z])/g, " $1")}</p>
+                      <p className="text-xs text-gray-500">
+                        {key.replace(/([A-Z])/g, " $1")}
+                      </p>
                       <p className="font-medium">{value}</p>
                     </div>
                   ))}
                 </div>
               )}
-              {activeProfileTab === "Professional Information" && (
-  <div className="grid grid-cols-2 gap-6">
-    <div>
-      <p className="text-xs text-gray-500">Employee ID</p>
-      <p className="font-medium">879912390</p>
-    </div>
-    <div>
-      <p className="text-xs text-gray-500">User Name</p>
-      <p className="font-medium">brooklyn_simmons</p>
-    </div>
-    <div>
-      <p className="text-xs text-gray-500">Employee Type</p>
-      <p className="font-medium">Office</p>
-    </div>
-    <div>
-      <p className="text-xs text-gray-500">Email Address</p>
-      <p className="font-medium">brooklyn.s@example.com</p>
-    </div>
-    <div>
-      <p className="text-xs text-gray-500">Department</p>
-      <p className="font-medium">Project Manager</p>
-    </div>
-    <div>
-      <p className="text-xs text-gray-500">Designation</p>
-      <p className="font-medium">Project Manager</p>
-    </div>
-    <div>
-      <p className="text-xs text-gray-500">Working Days</p>
-      <p className="font-medium">5 Days</p>
-    </div>
-    <div>
-      <p className="text-xs text-gray-500">Joining Date</p>
-      <p className="font-medium">July 10, 2022</p>
-    </div>
-    <div className="col-span-2">
-      <p className="text-xs text-gray-500">Office Location</p>
-      <p className="font-medium">2464 Royal Ln. Mesa, New Jersey</p>
-    </div>
-  </div>
-)}
 
-              
+              {activeProfileTab === "Professional Information" && (
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <p className="text-xs text-gray-500">Employee ID</p>
+                    <p className="font-medium">879912390</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">User Name</p>
+                    <p className="font-medium">brooklyn_simmons</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Employee Type</p>
+                    <p className="font-medium">Office</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Email Address</p>
+                    <p className="font-medium">brooklyn.s@example.com</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Department</p>
+                    <p className="font-medium">Project Manager</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Designation</p>
+                    <p className="font-medium">Project Manager</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Working Days</p>
+                    <p className="font-medium">5 Days</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Joining Date</p>
+                    <p className="font-medium">July 10, 2022</p>
+                  </div>
+                  <div className="col-span-2">
+                    <p className="text-xs text-gray-500">Office Location</p>
+                    <p className="font-medium">
+                      2464 Royal Ln. Mesa, New Jersey
+                    </p>
+                  </div>
+                </div>
+              )}
             </>
           )}
 
@@ -155,7 +165,7 @@ const EmployeeDetails = () => {
           {activeMainTab === "Attendance" && (
             <table className="min-w-full text-left">
               <thead>
-                <tr className="border-b">
+                <tr className="border-b border-[#7152F3]">
                   <th className="py-2">Date</th>
                   <th>Check In</th>
                   <th>Check Out</th>
@@ -166,7 +176,7 @@ const EmployeeDetails = () => {
               </thead>
               <tbody>
                 {employee.attendance.map((att, i) => (
-                  <tr key={i} className="border-b">
+                  <tr key={i} className="border-b border-gray-300">
                     <td className="py-2">{att.date}</td>
                     <td>{att.checkIn}</td>
                     <td>{att.checkOut}</td>
@@ -193,7 +203,7 @@ const EmployeeDetails = () => {
           {activeMainTab === "Leave" && (
             <table className="min-w-full text-left">
               <thead>
-                <tr className="border-b">
+                <tr className="border-b border-[#7152F3]">
                   <th className="py-2">Date</th>
                   <th>Duration</th>
                   <th>Days</th>
@@ -203,7 +213,7 @@ const EmployeeDetails = () => {
               </thead>
               <tbody>
                 {employee.leaves.map((leave, i) => (
-                  <tr key={i} className="border-b">
+                  <tr key={i} className="border-b border-gray-300">
                     <td className="py-2">{leave.date}</td>
                     <td>{leave.duration}</td>
                     <td>{leave.days}</td>
@@ -225,6 +235,21 @@ const EmployeeDetails = () => {
                 ))}
               </tbody>
             </table>
+          )}
+
+          {/* Map */}
+          {activeMainTab === "Map" && (
+            <div className="w-full h-[500px]">
+              <iframe
+                title="Employee Location"
+                src={mapUrl}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+              ></iframe>
+            </div>
           )}
         </div>
       </div>
