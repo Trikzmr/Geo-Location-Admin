@@ -87,7 +87,30 @@ const LeaveApplication = () => {
       {/* Table */}
       <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
         {loading ? (
-          <p className="p-4">Loading leave requests...</p>
+          <div className="p-4">
+            <div className="animate-pulse">
+              {/* Table header skeleton */}
+              <div className="flex space-x-4 mb-4 pb-3 border-b border-gray-200">
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                <div className="h-4 bg-gray-200 rounded w-16"></div>
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+                <div className="h-4 bg-gray-200 rounded w-12"></div>
+                <div className="h-4 bg-gray-200 rounded w-28"></div>
+                <div className="h-4 bg-gray-200 rounded w-16"></div>
+              </div>
+              {/* Table rows skeleton */}
+              {[1, 2, 3, 4, 5].map((index) => (
+                <div key={index} className="flex space-x-4 py-3 border-b border-gray-100">
+                  <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  <div className="h-4 bg-gray-200 rounded w-24"></div>
+                  <div className="h-4 bg-gray-200 rounded w-32"></div>
+                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                </div>
+              ))}
+            </div>
+          </div>
         ) : (
           <table className="min-w-full text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium">

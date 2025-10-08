@@ -16,9 +16,11 @@ import EmployeeApprovalDetails from "../Pages/EmployeeApprovalDetails";
 import EmployeeDetails from "../Pages/EmployeeDetails";
 import LeaveApplication from "../Pages/LeaveApplication"
 import LeaveApplicationDetails from "../Pages/LeaveApplicationDetails"
+import Landing from "../Pages/Landing";
 const Router = () => {
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forget-password/:id" element={<ForgetPassword />} />
       <Route path="/enterOtp/:id" element={<EnterOtp />} />

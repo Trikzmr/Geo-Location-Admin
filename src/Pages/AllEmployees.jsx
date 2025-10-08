@@ -98,7 +98,35 @@ const AllEmployees = () => {
       {/* Table */}
       <div className="overflow-x-auto w-[100%] border border-gray-200 rounded-[10px]">
         {loading ? (
-          <p className="p-4">Loading employees...</p>
+          <div className="p-4">
+            <div className="animate-pulse">
+              {/* Table header skeleton */}
+              <div className="flex space-x-4 mb-4 pb-3 border-b border-gray-300">
+                <div className="h-4 bg-gray-200 rounded w-28"></div>
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                <div className="h-4 bg-gray-200 rounded w-16"></div>
+                <div className="h-4 bg-gray-200 rounded w-16"></div>
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+              </div>
+              {/* Table rows skeleton */}
+              {[1, 2, 3, 4, 5].map((index) => (
+                <div key={index} className="flex space-x-4 py-3 border-b border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                  </div>
+                  <div className="h-4 bg-gray-200 rounded w-32"></div>
+                  <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                  <div className="flex gap-2">
+                    <div className="h-4 bg-gray-200 rounded w-4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-4"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         ) : (
           <table className="min-w-full text-left">
             <thead className="border-b">
@@ -132,7 +160,7 @@ const AllEmployees = () => {
                       </span>
                     </td>
                     <td className="py-3 px-4 flex gap-2 text-gray-500">
-                      <div className="eye" onClick={() => goToEmpProfile(emp._id)}>
+                      <div className="eye" onClick={() => goToEmpProfile(emp.userName)}>
                         <FiEye className="cursor-pointer" />
                       </div>
                       
