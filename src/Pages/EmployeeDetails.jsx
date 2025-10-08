@@ -1,44 +1,156 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import EmployeeLeaves from "../Components/EmployeeProfile/EmployeeLeaves";
+import EmployeeAttendance from "../Components/EmployeeProfile/EmployeeAttendance";
+import { useParams } from "react-router-dom";
 
 const EmployeeDetails = () => {
   const [activeMainTab, setActiveMainTab] = useState("Profile");
   const [activeProfileTab, setActiveProfileTab] = useState("Personal Information");
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [employeeData, setEmployeeData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [leavesData, setLeavesData] = useState([]);
+  let userName = useParams().id;
+  const getAttendance = async()=>{
+    console.log(userName);
+    try {
+      let api = "https://geo-location-based-attendence-tracking.onrender.com/api/getAttendanceByUsername";
+      let container = {
+        method: "POST",
+        body: JSON.stringify({userName: userName}),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+      let res = await fetch(api, container);
+      let data = await res.json();
+      console.log(data);
+      setAttendanceData(data);
+    } catch (error) {
+      
+    }
+  }
+  const getEmployee = async()=>{
+    try {
+      let api = "https://geo-location-based-attendence-tracking.onrender.com/api/getEmployeeByUsername";
+      let container = {
+        method: "POST",
+        body: JSON.stringify({userName: userName}),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+      let res = await fetch(api, container);
+      if(!res.ok){
+        const msg = await res.text();
+        throw new Error(msg || "Failed to fetch employee");
+      }
+      let data = await res.json();
+      setEmployeeData(data);
+      setError("");
+      // after employee is loaded, fetch leaves by userId (_id)
+      if (data && data._id) {
+        getLeavesByUserId(data._id);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load employee details");
+    } finally {
+      setLoading(false);
+    }
+  }
+  const getLeavesByUserId = async(userId)=>{
+    try {
+      let api = "https://geo-location-based-attendence-tracking.onrender.com/api/LeaveDataByuserId";
+      let container = {
+        method: "POST",
+        body: JSON.stringify({userId}),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+      let res = await fetch(api, container);
+      if(!res.ok){
+        const msg = await res.text();
+        throw new Error(msg || "Failed to fetch leaves");
+      }
+      let data = await res.json();
+      setLeavesData(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  const onload =()=>{
+    getAttendance();
+    getEmployee();
+  }
+  const avatarUrl = employeeData
+    ? `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        `${employeeData.firstName || ""} ${employeeData.lastName || ""}`.trim()
+      )}&background=random`
+    : "https://ui-avatars.com/api/?name=User&background=random";
 
-  const employee = {
-    name: "Brooklyn Simmons",
-    role: "Project Manager",
-    email: "brooklyn.s@example.com",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    personalInfo: {
-      firstName: "Brooklyn",
-      lastName: "Simmons",
-      mobile: "(702) 555-0122",
-      email: "brooklyn.s@example.com",
-      dob: "July 14, 1995",
-      maritalStatus: "Married",
-      gender: "Female",
-      nationality: "America",
-      address: "2464 Royal Ln. Mesa, New Jersey",
-      city: "California",
-      state: "United States",
-      zip: "35624",
-    },
-    attendance: [
-      { date: "July 01, 2023", checkIn: "09:28 AM", checkOut: "07:00 PM", break: "0:30 Min", hours: "9:02 Hrs", status: "On Time" },
-      { date: "July 02, 2023", checkIn: "09:20 AM", checkOut: "07:00 PM", break: "0:20 Min", hours: "9:20 Hrs", status: "On Time" },
-      { date: "July 04, 2023", checkIn: "09:45 AM", checkOut: "07:00 PM", break: "0:40 Min", hours: "8:35 Hrs", status: "Late" },
-    ],
-    leaves: [
-      { date: "July 01, 2023", duration: "July 05 - July 08", days: "3 Days", manager: "Mark Williams", status: "Pending" },
-      { date: "Apr 05, 2023", duration: "Apr 06 - Apr 10", days: "4 Days", manager: "Mark Williams", status: "Approved" },
-      { date: "Mar 12, 2023", duration: "Mar 14 - Mar 16", days: "2 Days", manager: "Mark Williams", status: "Approved" },
-    ],
-  };
+  useEffect(onload, []);
 
   // Generate Google Maps embed URL with pin
+  const mapAddress = employeeData?.presentAddress || employeeData?.permanentAddress || "";
   const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(
-    employee.personalInfo.address
+    mapAddress
   )}&output=embed`;
+
+  if (loading) {
+    return (
+      <div className="p-6">
+        {/* Header Skeleton */}
+        <div className="flex justify-between items-center border-b border-gray-300 pb-4 mb-6 w-[1140px]">
+          <div className="flex items-center space-x-4">
+            <div className="w-20 h-20 bg-gray-200 rounded-full animate-pulse"></div>
+            <div className="space-y-2">
+              <div className="h-6 bg-gray-200 rounded w-48 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-40 animate-pulse"></div>
+            </div>
+          </div>
+          <div className="h-10 bg-gray-200 rounded-[10px] w-32 animate-pulse"></div>
+        </div>
+
+        <div className="flex">
+          {/* Sidebar Skeleton */}
+          <div className="w-48 mr-4 space-y-2">
+            {[1, 2, 3, 4].map((index) => (
+              <div key={index} className="h-10 bg-gray-200 rounded animate-pulse"></div>
+            ))}
+          </div>
+
+          {/* Content Skeleton */}
+          <div className="flex-1 border border-gray-300 rounded-[10px] p-6 w-[900px]">
+            <div className="space-y-4">
+              <div className="h-8 bg-gray-200 rounded w-48 animate-pulse"></div>
+              <div className="grid grid-cols-2 gap-6">
+                {[1, 2, 3, 4, 5, 6].map((index) => (
+                  <div key={index} className="space-y-2">
+                    <div className="h-3 bg-gray-200 rounded w-24 animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-600">Error loading employee details: {error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
@@ -46,14 +158,14 @@ const EmployeeDetails = () => {
       <div className="flex justify-between items-center border-b border-gray-300 pb-4 mb-6 w-[1140px]">
         <div className="flex items-center space-x-4">
           <img
-            src={employee.avatar}
-            alt={employee.name}
+            src={avatarUrl}
+            alt={(employeeData?.firstName || "") + " " + (employeeData?.lastName || "")}
             className="w-20 h-20 rounded-full object-cover"
           />
           <div>
-            <h2 className="text-xl font-semibold">{employee.name}</h2>
-            <p className="text-gray-500">{employee.role}</p>
-            <p className="text-gray-500">{employee.email}</p>
+            <h2 className="text-xl font-semibold">{`${employeeData?.firstName || ""} ${employeeData?.lastName || ""}`.trim() || "-"}</h2>
+            <p className="text-gray-500">{employeeData?.role || "-"}</p>
+            <p className="text-gray-500">{employeeData?.email || "-"}</p>
           </div>
         </div>
         <button className="flex items-center bg-[#7152F3] text-white px-5 py-2 rounded-[10px]">
@@ -105,56 +217,78 @@ const EmployeeDetails = () => {
               {/* Inner Tab Content */}
               {activeProfileTab === "Personal Information" && (
                 <div className="grid grid-cols-2 gap-6">
-                  {Object.entries(employee.personalInfo).map(([key, value]) => (
-                    <div key={key}>
-                      <p className="text-xs text-gray-500">
-                        {key.replace(/([A-Z])/g, " $1")}
-                      </p>
-                      <p className="font-medium">{value}</p>
+                  <div>
+                    <p className="text-xs text-gray-500">First Name</p>
+                    <p className="font-medium">{employeeData?.firstName || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Last Name</p>
+                    <p className="font-medium">{employeeData?.lastName || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Mobile</p>
+                    <p className="font-medium">{employeeData?.number || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Email</p>
+                    <p className="font-medium">{employeeData?.email || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Date of Birth</p>
+                    <p className="font-medium">{employeeData?.dob || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Present Address</p>
+                    <p className="font-medium">{employeeData?.presentAddress || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Permanent Address</p>
+                    <p className="font-medium">{employeeData?.permanentAddress || "-"}</p>
+                  </div>
+                  {!!(employeeData?.qualification && employeeData.qualification.length) && (
+                    <div className="col-span-2">
+                      <p className="text-xs text-gray-500">Qualification</p>
+                      <p className="font-medium">{employeeData.qualification.join(", ")}</p>
                     </div>
-                  ))}
+                  )}
+                  {!!(employeeData?.skills && employeeData.skills.length) && (
+                    <div className="col-span-2">
+                      <p className="text-xs text-gray-500">Skills</p>
+                      <p className="font-medium">{employeeData.skills.join(", ")}</p>
+                    </div>
+                  )}
                 </div>
               )}
 
               {activeProfileTab === "Professional Information" && (
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <p className="text-xs text-gray-500">Employee ID</p>
-                    <p className="font-medium">879912390</p>
-                  </div>
-                  <div>
                     <p className="text-xs text-gray-500">User Name</p>
-                    <p className="font-medium">brooklyn_simmons</p>
+                    <p className="font-medium">{employeeData?.userName || "-"}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Employee Type</p>
-                    <p className="font-medium">Office</p>
+                    <p className="text-xs text-gray-500">Role</p>
+                    <p className="font-medium">{employeeData?.role || "-"}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500">Email Address</p>
-                    <p className="font-medium">brooklyn.s@example.com</p>
+                    <p className="font-medium">{employeeData?.email || "-"}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Department</p>
-                    <p className="font-medium">Project Manager</p>
+                    <p className="text-xs text-gray-500">Status</p>
+                    <p className="font-medium">{employeeData?.status || "-"}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Designation</p>
-                    <p className="font-medium">Project Manager</p>
+                    <p className="text-xs text-gray-500">Created At</p>
+                    <p className="font-medium">{employeeData?.createdAt ? new Date(employeeData.createdAt).toLocaleString() : "-"}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Working Days</p>
-                    <p className="font-medium">5 Days</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Joining Date</p>
-                    <p className="font-medium">July 10, 2022</p>
+                    <p className="text-xs text-gray-500">Updated At</p>
+                    <p className="font-medium">{employeeData?.updatedAt ? new Date(employeeData.updatedAt).toLocaleString() : "-"}</p>
                   </div>
                   <div className="col-span-2">
                     <p className="text-xs text-gray-500">Office Location</p>
-                    <p className="font-medium">
-                      2464 Royal Ln. Mesa, New Jersey
-                    </p>
+                    <p className="font-medium">{mapAddress || "-"}</p>
                   </div>
                 </div>
               )}
@@ -175,25 +309,8 @@ const EmployeeDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                {employee.attendance.map((att, i) => (
-                  <tr key={i} className="border-b border-gray-300">
-                    <td className="py-2">{att.date}</td>
-                    <td>{att.checkIn}</td>
-                    <td>{att.checkOut}</td>
-                    <td>{att.break}</td>
-                    <td>{att.hours}</td>
-                    <td>
-                      <span
-                        className={`px-2 py-1 rounded text-xs ${
-                          att.status === "On Time"
-                            ? "bg-green-100 text-green-600"
-                            : "bg-red-100 text-red-600"
-                        }`}
-                      >
-                        {att.status}
-                      </span>
-                    </td>
-                  </tr>
+                {attendanceData.map((att, i) => (
+                  <EmployeeAttendance i={i} att={att}/>
                 ))}
               </tbody>
             </table>
@@ -212,27 +329,21 @@ const EmployeeDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                {employee.leaves.map((leave, i) => (
-                  <tr key={i} className="border-b border-gray-300">
-                    <td className="py-2">{leave.date}</td>
-                    <td>{leave.duration}</td>
-                    <td>{leave.days}</td>
-                    <td>{leave.manager}</td>
-                    <td>
-                      <span
-                        className={`px-2 py-1 rounded text-xs ${
-                          leave.status === "Approved"
-                            ? "bg-green-100 text-green-600"
-                            : leave.status === "Pending"
-                            ? "bg-yellow-100 text-yellow-600"
-                            : "bg-red-100 text-red-600"
-                        }`}
-                      >
-                        {leave.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                {leavesData.map((leave) => {
+                  const requested = leave.requestedDate ? new Date(leave.requestedDate) : null;
+                  const start = leave.startingDate ? new Date(leave.startingDate) : null;
+                  const end = leave.endingDate ? new Date(leave.endingDate) : null;
+                  const msPerDay = 1000 * 60 * 60 * 24;
+                  const dayCount = start && end ? Math.max(1, Math.round((end - start) / msPerDay) + 1) : "-";
+                  const mapped = {
+                    date: requested ? requested.toLocaleDateString() : "-",
+                    duration: start && end ? `${start.toLocaleDateString()} - ${end.toLocaleDateString()}` : "-",
+                    days: dayCount,
+                    manager: leave.adminName || "-",
+                    status: leave.approvalStatus || "Pending",
+                  };
+                  return <EmployeeLeaves key={leave._id} leave={mapped}/>;
+                })}
               </tbody>
             </table>
           )}

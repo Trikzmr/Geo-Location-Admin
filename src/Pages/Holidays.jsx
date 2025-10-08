@@ -133,7 +133,35 @@ const Holidays = () => {
       {/* Table grouped by collapsible months */}
       <div className="overflow-y-auto flex-1">
         {loading ? (
-          <p className="p-4">Loading holidays...</p>
+          <div className="p-4">
+            <div className="animate-pulse space-y-4">
+              {/* Month skeleton */}
+              {[1, 2, 3].map((monthIndex) => (
+                <div key={monthIndex} className="rounded-md">
+                  {/* Month header skeleton */}
+                  <div className="flex justify-between items-center w-full px-4 py-3 bg-gray-100">
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                    <div className="h-4 bg-gray-200 rounded w-4"></div>
+                  </div>
+                  {/* Table skeleton */}
+                  <div className="border-t">
+                    <div className="flex space-x-4 py-3 px-4 border-b border-gray-200">
+                      <div className="h-4 bg-gray-200 rounded w-20"></div>
+                      <div className="h-4 bg-gray-200 rounded w-16"></div>
+                      <div className="h-4 bg-gray-200 rounded w-32"></div>
+                    </div>
+                    {[1, 2].map((rowIndex) => (
+                      <div key={rowIndex} className="flex space-x-4 py-3 px-4 border-b border-gray-100">
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        <div className="h-4 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-gray-200 rounded w-32"></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         ) : Object.keys(filteredHolidays).length > 0 ? (
           Object.keys(filteredHolidays).map((month) => (
             <div key={month} className="mb-4 rounded-md">

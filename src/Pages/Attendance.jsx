@@ -4,6 +4,7 @@ const Attendance = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const ITEMS_PER_PAGE = 10;
 
@@ -33,6 +34,8 @@ const Attendance = () => {
       }
     } catch (error) {
       console.error("API call failed:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -75,18 +78,45 @@ const Attendance = () => {
       </div>
 
       <div className="overflow-x-auto w-[100%] border border-gray-200 rounded-[10px]">
-        <table className="min-w-full text-left">
-          <thead>
-            <tr className="border-b border-gray-300">
-              <th className="py-3 px-4 text-gray-500">Employee Name</th>
-              <th className="py-3 px-4 text-gray-500">Designation</th>
-              <th className="py-3 px-4 text-gray-500">Type</th>
-              <th className="py-3 px-4 text-gray-500">Check In Time</th>
-              <th className="py-3 px-4 text-gray-500">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedData.length > 0 ? (
+        {loading ? (
+          <div className="p-4">
+            <div className="animate-pulse">
+              {/* Table header skeleton */}
+              <div className="flex space-x-4 mb-4 pb-3 border-b border-gray-300">
+                <div className="h-4 bg-gray-200 rounded w-28"></div>
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                <div className="h-4 bg-gray-200 rounded w-16"></div>
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                <div className="h-4 bg-gray-200 rounded w-16"></div>
+              </div>
+              {/* Table rows skeleton */}
+              {[1, 2, 3, 4, 5].map((index) => (
+                <div key={index} className="flex space-x-4 py-3 border-b border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                    <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  </div>
+                  <div className="h-4 bg-gray-200 rounded w-24"></div>
+                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <table className="min-w-full text-left">
+            <thead>
+              <tr className="border-b border-gray-300">
+                <th className="py-3 px-4 text-gray-500">Employee Name</th>
+                <th className="py-3 px-4 text-gray-500">Designation</th>
+                <th className="py-3 px-4 text-gray-500">Type</th>
+                <th className="py-3 px-4 text-gray-500">Check In Time</th>
+                <th className="py-3 px-4 text-gray-500">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedData.length > 0 ? (
               paginatedData.map((item, index) => (
                 <tr key={index} className="border-b border-gray-100">
                   <td className="px-4 py-3 flex items-center gap-2 h-[44px]">
@@ -127,10 +157,12 @@ const Attendance = () => {
             )}
           </tbody>
         </table>
+        )}
       </div>
 
       {/* Pagination controls */}
-      <div className="flex justify-between items-center mt-4 w-[1040px]">
+      {!loading && (
+        <div className="flex justify-between items-center mt-4 w-[1040px]">
         <div className="text-sm text-gray-500">
           Showing {paginatedData.length} of {filteredData.length} records
         </div>
@@ -161,7 +193,8 @@ const Attendance = () => {
             {">"}
           </button>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
