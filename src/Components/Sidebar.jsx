@@ -12,6 +12,7 @@ import {
   MapPin,
   Calendar,
 } from "lucide-react";
+import { SiTrueup } from "react-icons/si";
 
 const sidebarItems = [
   { icon: <Home size={18} />, title: "Dashboard", to: "overview", enabled: true },
@@ -22,7 +23,7 @@ const sidebarItems = [
   { icon: <CalendarDays size={18} />, title: "Holidays", to: "holidays", enabled: true },
   { icon: <Megaphone size={18} />, title: "Notices", to: "notices", enabled: false },
   { icon: <MapPin size={18} />, title: "Location", to: "location", enabled: false },
-  { icon: <Calendar size={18} />, title: "Schedule", to: "schedule", enabled: false },
+  { icon: <Calendar size={18} />, title: "Schedule", to: "schedule", enabled: true },
   { icon: <Settings size={18} />, title: "Settings", to: "settings", enabled: true },
 ];
 
