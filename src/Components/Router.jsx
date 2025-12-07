@@ -16,6 +16,8 @@ import EmployeeApprovalDetails from "../Pages/EmployeeApprovalDetails";
 import EmployeeDetails from "../Pages/EmployeeDetails";
 import LeaveApplication from "../Pages/LeaveApplication"
 import LeaveApplicationDetails from "../Pages/LeaveApplicationDetails"
+import SchedulePage from "../Pages/SchedulePage";
+import AddSchedule from "../Pages/AddSchedule";
 import Landing from "../Pages/Landing";
 const Router = () => {
   return (
@@ -37,6 +39,8 @@ const Router = () => {
         <Route path="employeeDetails/:id" element={<EmployeeDetails />} />
         <Route path="leaveApplication" element={<LeaveApplication/>} />
         <Route path="leaveApplicationDetails/:id" element={<LeaveApplicationDetails/>} />
+        <Route path="schedule" element={<SchedulePage/>} />
+        <Route path="schedule/add" element={<AddSchedule/>} />
       </Route>
     </Routes>
   );

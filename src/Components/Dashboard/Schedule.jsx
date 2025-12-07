@@ -5,11 +5,12 @@ import "react-calendar/dist/Calendar.css";
 import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 import "./calendar-custom.css"; // custom override styles
 
-const Schedule = () => {
+const Schedule = ({ selectedDate: propSelectedDate, onSelectDate }) => {
   const [date, setDate] = useState(new Date());
   const [activeStartDate, setActiveStartDate] = useState(new Date());
   const [workDaySet, setWorkDaySet] = useState(new Set());
   const [offDaySet, setOffDaySet] = useState(new Set());
+  const [dayMap, setDayMap] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -39,6 +40,7 @@ const Schedule = () => {
       const data = await res.json();
       const work = new Set();
       const off = new Set();
+      const map = {};
       if (Array.isArray(data?.dayCalander)) {
         for (const item of data.dayCalander) {
           if (!item?.date) continue;
@@ -52,10 +54,13 @@ const Schedule = () => {
             off.add(key);
             work.delete(key);
           }
+          // store full item for details
+          map[key] = item;
         }
       }
       setWorkDaySet(work);
       setOffDaySet(off);
+      setDayMap(map);
     } catch (err) {
       console.error(err);
       setWorkDaySet(new Set());
@@ -104,8 +109,15 @@ const Schedule = () => {
           </div>
         ) : (
           <Calendar
-            onChange={setDate}
-            value={date}
+            onChange={(d) => {
+              // when the calendar value changes (select), also notify parent
+              setDate(d);
+              if (onSelectDate) {
+                const key = formatKey(d);
+                onSelectDate(key, dayMap[key] || null);
+              }
+            }}
+            value={propSelectedDate ?? date}
             nextLabel="›"
             prevLabel="‹"
             navigationLabel={({ date }) =>
@@ -113,6 +125,14 @@ const Schedule = () => {
             }
             onActiveStartDateChange={({ activeStartDate }) => {
               if (activeStartDate) setActiveStartDate(activeStartDate);
+            }}
+            onClickDay={(d) => {
+              // react-calendar onClickDay fires for day click
+              setDate(d);
+              if (onSelectDate) {
+                const key = formatKey(d);
+                onSelectDate(key, dayMap[key] || null);
+              }
             }}
             tileClassName={({ date, view }) =>
               view === "month"

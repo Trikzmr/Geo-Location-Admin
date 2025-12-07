@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 
 const LeaveApplication = () => {
@@ -19,6 +20,7 @@ const LeaveApplication = () => {
   const [updatingRowId, setUpdatingRowId] = useState(null);
 
   const containerRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     apicall();
@@ -267,7 +269,11 @@ const LeaveApplication = () => {
                   const allowed = allowedTransitions(req.approvalStatus);
                   const isMenuOpen = openMenuFor === id;
                   return (
-                    <tr key={id} className="hover:bg-gray-50">
+                    <tr
+                      key={id}
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={() => navigate(`/dashboard/leaveApplicationDetails/${id}`)}
+                    >
                       <td className="px-5 py-3">{req.userName}</td>
                       <td className="px-5 py-3">
                         {formatDate(req.requestedDate)}
