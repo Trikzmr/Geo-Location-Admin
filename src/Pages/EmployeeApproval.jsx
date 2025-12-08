@@ -1,73 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiEye, FiEdit, FiTrash2, FiFilter } from 'react-icons/fi'; 
 import { BiSearch } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 const EmployeeApproval = () => {
-  const employees = [
-    {
-      avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-      name: "Darlene Robertson",
-      id: "345321231",
-      department: "Design",
-      designation: "UI/UX Designer",
-      type: "Office",
-      status: "Permanent",
-    },
-    {
-      avatar: "https://randomuser.me/api/portraits/men/2.jpg",
-      name: "Floyd Miles",
-      id: "987890345",
-      department: "Development",
-      designation: "PHP Developer",
-      type: "Office",
-      status: "Permanent",
-    },
-    {
-      avatar: "https://randomuser.me/api/portraits/men/3.jpg",
-      name: "Cody Fisher",
-      id: "453367122",
-      department: "Sales",
-      designation: "Sales Manager",
-      type: "Office",
-      status: "Permanent",
-    },
-    {
-      avatar: "https://randomuser.me/api/portraits/women/4.jpg",
-      name: "Dianne Russell",
-      id: "345321231",
-      department: "Sales",
-      designation: "BDM",
-      type: "Remote",
-      status: "Permanent",
-    },
-    {
-      avatar: "https://randomuser.me/api/portraits/women/5.jpg",
-      name: "Savannah Nguyen",
-      id: "453677881",
-      department: "Design",
-      designation: "Design Lead",
-      type: "Office",
-      status: "Permanent",
-    },
-    {
-      avatar: "https://randomuser.me/api/portraits/men/6.jpg",
-      name: "Jacob Jones",
-      id: "223456789",
-      department: "Development",
-      designation: "React Developer",
-      type: "Remote",
-      status: "Permanent",
-    },
-    {
-      avatar: "https://randomuser.me/api/portraits/women/6.jpg",
-      name: "Kathryn Murphy",
-      id: "998812300",
-      department: "HR",
-      designation: "HR Manager",
-      type: "Office",
-      status: "Permanent",
-    },
-  ];
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPending = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch('https://geo-location-based-attendence-tracking.onrender.com/api/GetPendingRegistration');
+        if (!res.ok) throw new Error(`Fetch error: ${res.status}`);
+        const data = await res.json();
+        setEmployees(data || []);
+      } catch (err) {
+        setError(err.message || 'Failed to fetch');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPending();
+  }, []);
+
+  // reset page when itemsPerPage or employees change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [itemsPerPage, employees.length]);
+
+  const totalItems = employees.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const paginated = employees.slice(startIndex, endIndex);
+
+  const goToPage = (p) => {
+    const page = Math.max(1, Math.min(totalPages, p));
+    setCurrentPage(page);
+  };
 
   return (
     <div className="p-6 ">
@@ -105,6 +82,13 @@ const EmployeeApproval = () => {
 
 
       {/* Table */}
+      {loading && (
+        <div className="p-6 bg-white rounded-md shadow mb-4">Loading pending registrations...</div>
+      )}
+      {error && (
+        <div className="p-6 bg-red-50 text-red-700 rounded-md shadow mb-4">Error: {error}</div>
+      )}
+
       <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
         <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-50 text-gray-600 font-medium">
@@ -119,27 +103,31 @@ const EmployeeApproval = () => {
             </tr>
           </thead>
           <tbody className="divide-y">
-            {employees.map((emp, index) => (
-              <tr key={`${emp.id}-${index}`} className="hover:bg-gray-50">
+            {paginated.map((emp, index) => (
+              <tr key={`${emp._id || index}`} className="hover:bg-gray-50">
                 <td className="px-5 py-3 flex items-center gap-3">
                   <img
-                    src={emp.avatar}
-                    alt={emp.name}
+                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent((emp.firstName || '') + ' ' + (emp.lastName || ''))}&background=ddd&color=555&rounded=true`}
+                    alt={`${emp.firstName} ${emp.lastName}`}
                     className="w-9 h-9 rounded-full"
                   />
-                  <span className="font-medium text-gray-800">{emp.name}</span>
+                  <span className="font-medium text-gray-800">{(emp.firstName || '') + ' ' + (emp.lastName || '')}</span>
                 </td>
-                <td className="px-5 py-3">{emp.id}</td>
-                <td className="px-5 py-3">{emp.department}</td>
-                <td className="px-5 py-3">{emp.designation}</td>
-                <td className="px-5 py-3">{emp.type}</td>
+                <td className="px-5 py-3">{emp._id}</td>
+                <td className="px-5 py-3">{emp.role || '-'}</td>
+                <td className="px-5 py-3">{emp.qualification ? emp.qualification.join(', ') : '-'}</td>
+                <td className="px-5 py-3">{emp.skills ? emp.skills.join(', ') : '-'}</td>
                 <td className="px-5 py-3">
                   <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">
                     {emp.status}
                   </span>
                 </td>
                 <td className="px-5 py-3 flex gap-3 text-gray-500">
-                  <FiEye className="cursor-pointer hover:text-purple-600" title="View" />
+                  <FiEye
+                    className="cursor-pointer hover:text-purple-600"
+                    title="View"
+                    onClick={() => navigate(`/dashboard/employeeRequestDetails/${emp._id}`)}
+                  />
                   <FiEdit className="cursor-pointer hover:text-blue-500" title="Edit" />
                   <FiTrash2 className="cursor-pointer hover:text-red-500" title="Delete" />
                 </td>
@@ -152,15 +140,51 @@ const EmployeeApproval = () => {
       {/* Pagination */}
       <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4 text-sm text-gray-500">
         <div>
-          Showing <strong>1 to {employees.length}</strong> of <strong>60</strong> records
+          Showing <strong>{totalItems === 0 ? 0 : startIndex + 1} to {endIndex}</strong> of <strong>{totalItems}</strong> records
         </div>
-        <div className="flex gap-2">
-          <button className="px-3 py-1 border rounded-md hover:bg-gray-100">{'<'}</button>
-          <button className="px-3 py-1 border rounded-md bg-purple-600 text-white">1</button>
-          <button className="px-3 py-1 border rounded-md">2</button>
-          <button className="px-3 py-1 border rounded-md">3</button>
-          <button className="px-3 py-1 border rounded-md">4</button>
-          <button className="px-3 py-1 border rounded-md hover:bg-gray-100">{'>'}</button>
+
+        <div className="flex items-center gap-3">
+          <div className="flex gap-2 items-center">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 border rounded-md ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+            >
+              {'<'}
+            </button>
+
+            {/* page buttons */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                onClick={() => goToPage(p)}
+                className={`px-3 py-1 border rounded-md ${p === currentPage ? 'bg-purple-600 text-white' : ''}`}
+              >
+                {p}
+              </button>
+            ))}
+
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1 border rounded-md ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+            >
+              {'>'}
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-gray-600">Per page:</label>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              className="border rounded px-2 py-1 text-sm"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
