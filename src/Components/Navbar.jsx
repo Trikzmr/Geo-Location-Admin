@@ -38,6 +38,7 @@ const Navbar = () => {
           <Link to="/" className="text-gray-700 hover:text-[#7152F3] font-medium">Home</Link>
           <a href="#features" className="text-gray-700 hover:text-[#7152F3] font-medium">Features</a>
           <a href="#how-it-works" className="text-gray-700 hover:text-[#7152F3] font-medium">How it works</a>
+          <Link to="/recruitment" className="text-gray-700 hover:text-[#7152F3] font-medium">Join Us</Link>
           <Link to="/dashboard/overview" className="text-gray-700 hover:text-[#7152F3] font-medium">Dashboard</Link>
           
           {isAuthenticated ? (
@@ -116,6 +117,7 @@ const Navbar = () => {
             <Link to="/" className="block text-gray-700 hover:text-[#7152F3] font-medium" onClick={() => setIsOpen(false)}>Home</Link>
             <a href="#features" className="block text-gray-700 hover:text-[#7152F3] font-medium" onClick={() => setIsOpen(false)}>Features</a>
             <a href="#how-it-works" className="block text-gray-700 hover:text-[#7152F3] font-medium" onClick={() => setIsOpen(false)}>How it works</a>
+            <Link to="/recruitment" className="block text-gray-700 hover:text-[#7152F3] font-medium" onClick={() => setIsOpen(false)}>Join Us</Link>
             <Link to="/dashboard/overview" className="block text-gray-700 hover:text-[#7152F3] font-medium" onClick={() => setIsOpen(false)}>Dashboard</Link>
             
             {isAuthenticated ? (

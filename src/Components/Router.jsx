@@ -19,11 +19,13 @@ import LeaveApplicationDetails from "../Pages/LeaveApplicationDetails"
 import SchedulePage from "../Pages/SchedulePage";
 import AddSchedule from "../Pages/AddSchedule";
 import Landing from "../Pages/Landing";
+import Recruitment from "../Pages/Recruitment";
 const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/recruitment" element={<Recruitment />} />
       <Route path="/forget-password/:id" element={<ForgetPassword />} />
       <Route path="/enterOtp/:id" element={<EnterOtp />} />
 

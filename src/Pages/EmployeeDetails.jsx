@@ -74,7 +74,7 @@ const EmployeeDetails = () => {
     try {
       setCurrentLocationError("");
       const api = "https://geo-location-based-attendence-tracking.onrender.com/api/currentLocation";
-      const date = "2025-12-22";
+      const date = new Date().toISOString().split("T")[0];
       const container = {
         method: "POST",
         body: JSON.stringify({ userName: userName, date: date }),
@@ -170,7 +170,7 @@ const EmployeeDetails = () => {
       .then(() => {
         if (!isMounted) return;
         const google = window.google;
-        const geofenceCenter = { lat: 22.5445, lng: 88.3587 };
+        const geofenceCenter = { lat: 22.516741683754145, lng: 88.41844651035316 }; //ict building = 22.516741683754145, 88.41844651035316
 
         if (!mapInstanceRef.current) {
           mapInstanceRef.current = new google.maps.Map(mapRef.current, {
@@ -218,14 +218,30 @@ const EmployeeDetails = () => {
           });
         }
 
-        // Fit map bounds
+        // Fit map bounds to show entire circle (500m radius)
         try {
+          // Calculate bounds that encompass the entire circle
+          const radiusInMeters = 500;
+          const radiusInKm = radiusInMeters / 1000;
+          const earthRadiusKm = 6371;
+          
+          // Create bounds encompassing the circle
           const bounds = new google.maps.LatLngBounds();
-          bounds.extend(geofenceCenter);
-          bounds.extend(markerRef.current.getPosition());
-          mapInstanceRef.current.fitBounds(bounds, 100);
+          
+          // Add cardinal points around the circle to ensure full coverage
+          const lat = geofenceCenter.lat;
+          const lng = geofenceCenter.lng;
+          const latDelta = (radiusInKm / earthRadiusKm) * (180 / Math.PI);
+          const lngDelta = (radiusInKm / (earthRadiusKm * Math.cos((lat * Math.PI) / 180))) * (180 / Math.PI);
+          
+          bounds.extend(new google.maps.LatLng(lat + latDelta, lng + lngDelta));
+          bounds.extend(new google.maps.LatLng(lat - latDelta, lng - lngDelta));
+          bounds.extend(new google.maps.LatLng(lat + latDelta, lng - lngDelta));
+          bounds.extend(new google.maps.LatLng(lat - latDelta, lng + lngDelta));
+          
+          mapInstanceRef.current.fitBounds(bounds, 50);
         } catch (err) {
-          // ignore
+          console.warn("Failed to fit bounds:", err);
         }
       })
       .catch((err) => {
